@@ -7,12 +7,12 @@ using System.Text;
 
 namespace CoreData
 {
-    public class FitPowerCrudOptions<TItem>: ICrudOptions<TItem>
+    public class CrudOptions<TItem>: ICrudOptions<TItem>
     {
         private string connectionString { get; set; }
         private SqlConnection connection { get; set; }
         
-        public FitPowerCrudOptions(string connectionString)
+        public CrudOptions(string connectionString)
         {
             this.connectionString = connectionString;
             this.connection = new SqlConnection(connectionString);
