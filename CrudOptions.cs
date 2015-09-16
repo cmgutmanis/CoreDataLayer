@@ -35,7 +35,7 @@ namespace CoreData
             cmd.Connection = connection;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             var mapped = PropertyMapper.GetParamsFromObject(item);
-            cmd.Parameters.Add(mapped);
+            cmd.Parameters.AddRange(mapped.ToArray());
             cmd.CommandText = string.Concat("dbo.Add", typeof(TItem).ToString());
 
             var id = Convert.ToInt32(cmd.ExecuteScalar());
