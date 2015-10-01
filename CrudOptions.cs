@@ -28,7 +28,18 @@ namespace CoreData
             throw new NotImplementedException();
         }
 
-        public int Add(TItem item)
+        /// <summary>
+        /// Uses default sproc naming convention dbo.Add[itemtype]
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public int Add(TItem item)   
+        {
+            var sprocCommand = string.Concat("dbo.Add", typeof(TItem).ToString());
+            return Add(item, sprocCommand);
+        }
+
+        public int Add(TItem item, string sprocCommand)
         {
             connection.Open();
             var cmd = new SqlCommand();
@@ -36,8 +47,7 @@ namespace CoreData
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             var mapped = PropertyMapper.GetParamsFromObject(item);
             cmd.Parameters.AddRange(mapped.ToArray());
-            cmd.CommandText = string.Concat("dbo.Add", typeof(TItem).ToString());
-
+            cmd.CommandText = sprocCommand;
             var id = Convert.ToInt32(cmd.ExecuteScalar());
             return id;
         }
@@ -51,5 +61,8 @@ namespace CoreData
         {
             throw new NotImplementedException();
         }
+
+
+
     }
 }

@@ -13,6 +13,8 @@ namespace CoreData
 
         int Add(TItem item);
 
+        int Add(TItem item, string sprocCommand);
+
         void Update(TItem item);
 
         void Delete(int id);
