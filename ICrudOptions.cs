@@ -15,7 +15,9 @@ namespace CoreData
 
         void Add(string sprocCommand);
 
-        void Update(TItem item);
+        void Update(string sprocCommand);
+
+        void Update();
 
         void Delete(int id);
     }

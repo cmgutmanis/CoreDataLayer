@@ -32,6 +32,7 @@ namespace CoreData
             throw new NotImplementedException();
         }
 
+        // Quick and dirty - should pass exclusions into propertymapper and handle it once.
         public CrudOptions<TItem> MapAllExcept(List<string> exclusions)
         {
             var mapped = PropertyMapper.GetParamsFromObject(item).ToList();
@@ -46,6 +47,12 @@ namespace CoreData
             return this;
         }
 
+        public CrudOptions<TItem> MapAll()
+        {
+            var sqlParams = PropertyMapper.GetParamsFromObject(item).ToList();
+            return this;
+        }
+        
         /// <summary>
         /// Uses default sproc naming convention dbo.Add[itemtype]
         /// </summary>
@@ -69,9 +76,22 @@ namespace CoreData
             connection.Close();
         }
 
-        public void Update(TItem item)
+        public void Update()
         {
-            throw new NotImplementedException();
+            var sprocCommand = string.Concat("dbo.Update", typeof(TItem).ToString());
+            Update(sprocCommand);
+        }
+
+        public void Update(string sprocCommand)
+        {
+            connection.Open();
+            var cmd = new SqlCommand();
+            cmd.Connection = connection;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddRange(this.sqlParams.ToArray());
+            cmd.CommandText = sprocCommand;
+            cmd.ExecuteNonQuery();
+            connection.Close();
         }
 
         public void Delete(int id)
