@@ -51,13 +51,13 @@ namespace CoreData
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public int Add()   
+        public void Add()   
         {
             var sprocCommand = string.Concat("dbo.Add", typeof(TItem).ToString());
-            return Add(sprocCommand);
+            Add(sprocCommand);
         }
 
-        public int Add(string sprocCommand)
+        public void Add(string sprocCommand)
         {
             connection.Open();
             var cmd = new SqlCommand();
@@ -65,11 +65,8 @@ namespace CoreData
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddRange(this.sqlParams.ToArray());
             cmd.CommandText = sprocCommand;
-        //    var id = Convert.ToInt32(cmd.ExecuteScalar());
             cmd.ExecuteNonQuery();
-
-            
-            return 0;
+            connection.Close();
         }
 
         public void Update(TItem item)

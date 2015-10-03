@@ -11,9 +11,9 @@ namespace CoreData
 
         IEnumerable<TItem> GetAll();
 
-        int Add();
+        void Add();
 
-        int Add(string sprocCommand);
+        void Add(string sprocCommand);
 
         void Update(TItem item);
 
