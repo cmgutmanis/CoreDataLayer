@@ -49,7 +49,7 @@ namespace CoreData
 
         public CrudOptions<TItem> MapAll()
         {
-            var sqlParams = PropertyMapper.GetParamsFromObject(item).ToList();
+            this.sqlParams = PropertyMapper.GetParamsFromObject(item).ToList();
             return this;
         }
         
