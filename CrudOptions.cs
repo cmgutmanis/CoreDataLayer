@@ -9,13 +9,23 @@ namespace CoreData
 {
     public class CrudOptions<TItem>: ICrudOptions<TItem>, IDisposable
     {
-        private string connectionString { get; set; }
-        private SqlConnection connection { get; set; }
-        private TItem item { get; set; }
+        private readonly string connectionString;
+        private readonly SqlConnection connection;
+        private readonly TItem item;
         private List<SqlParameter> sqlParams { get; set; }
         
         public CrudOptions(string connectionString, TItem item)
         {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException("connectionString", "ConnectionString cannot be null or empty.");
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException("item", "item object cannot be null or empty");
+            }
+
             this.connectionString = connectionString;
             this.connection = new SqlConnection(connectionString);
             this.sqlParams = new List<SqlParameter>();
@@ -59,16 +69,17 @@ namespace CoreData
         /// <returns></returns>
         public void Add()   
         {
-            if (this.sqlParams.Count() == 0)
-            {
-                this.MapAll();
-            }
             var sprocCommand = string.Concat("dbo.Add", typeof(TItem).ToString());
             Add(sprocCommand);
         }
 
         public void Add(string sprocCommand)
         {
+            if (this.sqlParams.Count() == 0)
+            {
+                this.MapAll();
+            }
+
             connection.Open();
             var cmd = new SqlCommand();
             cmd.Connection = connection;
@@ -97,6 +108,7 @@ namespace CoreData
             connection.Close();
         }
 
+        //todo: establish this as a non-PK int deletion operation.
         public void Delete(int id)
         {
             throw new NotImplementedException();
