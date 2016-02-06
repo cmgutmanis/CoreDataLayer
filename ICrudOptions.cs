@@ -20,5 +20,7 @@ namespace CoreData
         void Update();
 
         void Delete(int id);
+
+        ICrudOptions<TItem> MapAllExcept(List<string> exclusions);
     }
 }

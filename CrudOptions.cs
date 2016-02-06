@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CoreData
 {
-    public class CrudOptions<TItem>: ICrudOptions<TItem>
+    public class CrudOptions<TItem>: ICrudOptions<TItem>, IDisposable
     {
         private string connectionString { get; set; }
         private SqlConnection connection { get; set; }
@@ -33,7 +33,7 @@ namespace CoreData
         }
 
         // Quick and dirty - should pass exclusions into propertymapper and handle it once.
-        public CrudOptions<TItem> MapAllExcept(List<string> exclusions)
+        public ICrudOptions<TItem> MapAllExcept(List<string> exclusions)
         {
             var mapped = PropertyMapper.GetParamsFromObject(item).ToList();
             foreach (var i in mapped)
@@ -47,10 +47,9 @@ namespace CoreData
             return this;
         }
 
-        public CrudOptions<TItem> MapAll()
+        private void MapAll()
         {
             this.sqlParams = PropertyMapper.GetParamsFromObject(item).ToList();
-            return this;
         }
         
         /// <summary>
@@ -60,6 +59,10 @@ namespace CoreData
         /// <returns></returns>
         public void Add()   
         {
+            if (this.sqlParams.Count() == 0)
+            {
+                this.MapAll();
+            }
             var sprocCommand = string.Concat("dbo.Add", typeof(TItem).ToString());
             Add(sprocCommand);
         }
@@ -99,7 +102,9 @@ namespace CoreData
             throw new NotImplementedException();
         }
 
-
-
+        public void Dispose()
+        {
+            this.Dispose();
+        }
     }
 }
