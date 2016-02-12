@@ -7,14 +7,14 @@ using System.Text;
 
 namespace CoreData
 {
-    public class CrudOptions<TItem>: ICrudOptions<TItem>, IDisposable
+    public class AdoCrudOptions<TItem>: ICrudOptions<TItem>, IDisposable
     {
         private readonly string connectionString;
         private readonly SqlConnection connection;
         private readonly TItem item;
         private List<SqlParameter> sqlParams { get; set; }
         
-        public CrudOptions(string connectionString, TItem item)
+        public AdoCrudOptions(string connectionString, TItem item)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
